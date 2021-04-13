@@ -13,10 +13,11 @@ class UserController extends Controller
         // if ($request->user()->cannot('viewAny',Post::class)) {
         //     abort(403);
         // }
-
+        $data = User::all();
+//dd($data);
         return Inertia::render('Users/Index', [
             'hello' => 'world',
-            'data' => User::all(),
+            'data' => $data,
             ]);
     }
 

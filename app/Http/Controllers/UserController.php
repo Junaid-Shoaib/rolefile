@@ -5,19 +5,27 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
     public function index(Request $request)
     {
-        // if ($request->user()->cannot('viewAny',Post::class)) {
-        //     abort(403);
-        // }
-        $data = User::all();
+        $data = User::all()->map(function($user){
+            return [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'can' => [
+                    'edit_articles' => $user->can('edit articles'),
+                ],
+            ];
+        });
 //dd($data);
         return Inertia::render('Users/Index', [
             'hello' => 'world',
             'data' => $data,
+            'can' => auth()->user()->can('publish articles'),
             ]);
     }
 

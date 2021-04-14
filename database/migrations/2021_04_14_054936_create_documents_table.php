@@ -15,6 +15,11 @@ class CreateDocumentsTable extends Migration
     {
         Schema::create('documents', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('path');
+            $table->tinyInteger('enabled')->default('1');
+            $table->unsignedBigInteger('year_id');
+            $table->foreign('year_id')->references('id')->on('years');
             $table->timestamps();
         });
     }

@@ -15,9 +15,9 @@ class DocumentController extends Controller
                 'id' => $document->id,
                 'name' => $document->name,
                 'path' => $document->path,
-                'can' => [
-                    'read_only' => $document->can('read only'),
-                ],
+                'year_id' => $document->year_id,
+                'read_only' => true,
+
             ];
         });
 //dd($data);
@@ -28,19 +28,20 @@ class DocumentController extends Controller
 
     public function create()
     {
-        return Inertia::render('Users/Create');
+        return Inertia::render('Documents/Create');
     }
 
     public function store()
     {
-        User::create(
+        Document::create(
             Request::validate([
-            'title' => ['required', 'max:30'],
-            'body' => ['required'],
+            'name' => ['required', 'max:30'],
+            'path' => ['required'],
+            'year_id' => 1,
             ])
         );
             //        Post::create($request->all());
-        return Redirect::route('users')->with('success', 'User created.');
+        return Redirect::route('users')->with('success', 'Document created.');
     }
 
     public function show(User $user)

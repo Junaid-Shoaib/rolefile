@@ -8,4 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Document extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'name','path','enabled','year_id'
+    ];
+
+    public function year(){
+        return $this->belongsTo('App\Models\Year', 'year_id');
+    }
+
 }

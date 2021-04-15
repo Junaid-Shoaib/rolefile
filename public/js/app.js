@@ -17936,15 +17936,22 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      form: {
+      form: this.$inertia.form({
         name: null,
-        path: null
-      }
+        path: null,
+        avatar: null
+      })
     };
   },
   methods: {
     submit: function submit() {
-      this.$inertia.post(this.route('documents.store'), this.form);
+      //            this.$inertia.post(this.route('documents.store'), this.form)
+      this.form.post('documents.store');
+    },
+    onFileChange: function onFileChange(e) {
+      var files = e.target.files || e.dataTransfer.files;
+      if (!files.length) return;
+      this.form.avatar = files[0];
     }
   }
 });
@@ -21960,7 +21967,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_app_layout, null, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("form", {
-        onSubmit: _cache[3] || (_cache[3] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
+        onSubmit: _cache[4] || (_cache[4] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
           return $options.submit && $options.submit.apply($options, arguments);
         }, ["prevent"]))
       }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
@@ -21985,7 +21992,20 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       /* NEED_PATCH */
       ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.path]]), $props.errors.path ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.errors.path), 1
       /* TEXT */
-      )) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), _hoisted_5], 32
+      )) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
+        type: "file",
+        onChange: _cache[3] || (_cache[3] = function () {
+          return $options.onFileChange && $options.onFileChange.apply($options, arguments);
+        })
+      }, null, 32
+      /* HYDRATE_EVENTS */
+      ), $data.form.progress ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("progress", {
+        key: 2,
+        value: $data.form.progress.percentage,
+        max: "100"
+      }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.form.progress.percentage) + "% ", 9
+      /* TEXT, PROPS */
+      , ["value"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), _hoisted_5], 32
       /* HYDRATE_EVENTS */
       )])];
     }),

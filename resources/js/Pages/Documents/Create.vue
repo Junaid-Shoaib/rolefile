@@ -47,7 +47,7 @@
         methods: {
             submit() {
 //            this.$inertia.post(this.route('documents.store'), this.form)
-            this.form.post('documents.store')
+            this.form.post(route('documents.store'))
             },
             onFileChange(e) {
                 var files = e.target.files || e.dataTransfer.files;

@@ -17946,7 +17946,7 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     submit: function submit() {
       //            this.$inertia.post(this.route('documents.store'), this.form)
-      this.form.post('documents.store');
+      this.form.post(route('documents.store'));
     },
     onFileChange: function onFileChange(e) {
       var files = e.target.files || e.dataTransfer.files;

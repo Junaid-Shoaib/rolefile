@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Document;
+use App\Models\Year;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class DocumentController extends Controller
@@ -31,8 +33,17 @@ class DocumentController extends Controller
         return Inertia::render('Documents/Create');
     }
 
-    public function store()
+    public function store(Request $request)
     {
+        if($request->all())
+        {
+//            $path = $request->file('avatar');
+//            dd($path->path());
+            $year = Year::first()->id; 
+            $extension = $request->file('avatar')->extension();
+            $path = $request->file('avatar')->storeAs('public/'.$year, 'myfile'.'.'.$extension);
+            dd($path);
+        }
         Document::create(
             Request::validate([
             'name' => ['required', 'max:30'],
@@ -41,15 +52,15 @@ class DocumentController extends Controller
             ])
         );
             //        Post::create($request->all());
-        return Redirect::route('users')->with('success', 'Document created.');
+        return Redirect::route('documents')->with('success', 'Document created.');
     }
 
-    public function show(User $user)
+    public function show(Document $document)
     {
         //
     }
 
-    public function edit(User $user)
+    public function edit(Document $document)
     {
         return Inertia::render('Users/Edit', [
             'user' => [
@@ -60,21 +71,21 @@ class DocumentController extends Controller
         ]);
     }
 
-    public function update(User $user)
+    public function update(Document $document)
     {
-        $user->update(
+        $document->update(
             Request::validate([
             'title' => ['required', 'max:30'],
             'body' => ['required'],
             ])
         );
 
-        return Redirect::route('users')->with('success', 'User updated.');
+        return Redirect::route('documents')->with('success', 'User updated.');
     }
 
-    public function destroy(User $user)
+    public function destroy(Document $document)
     {
-        $user->delete();
+        $document->delete();
         return Redirect::back()->with('success', 'User deleted.');
     }
 }

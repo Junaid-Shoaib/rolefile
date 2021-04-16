@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Redirect;
 use App\Models\Document;
 use App\Models\Year;
 use Illuminate\Support\Facades\Storage;
@@ -17,7 +17,7 @@ class DocumentController extends Controller
             return [
                 'id' => $document->id,
                 'name' => $document->name,
-                'path' => $document->path,
+                'path' => asset('storage/'.$document->year_id.'/'.$document->name),
                 'year_id' => $document->year_id,
                 'read_only' => true,
 
@@ -41,9 +41,9 @@ class DocumentController extends Controller
 //            $path = $request->file('avatar');
 //            dd($path->path());
             $year = Year::first()->id;
-            $name = 'myfile'; 
-            $extension = $request->file('avatar')->extension();
-            $path = $request->file('avatar')->storeAs('public/'.$year, $name.'.'.$extension);
+            $name = $request->file('avatar')->getClientOriginalName();
+//            $extension = $request->file('avatar')->extension();
+            $path = $request->file('avatar')->storeAs('public/'.$year, $name);
  //           dd($path);
         Document::create([
             'name' => $name,

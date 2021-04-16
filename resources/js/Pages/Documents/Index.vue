@@ -16,8 +16,8 @@
                 </thead>
                 <tbody>
                     <tr v-for="item in data" :key="item.id">
-                        <td class="py-2 px-4 border">{{item.name}}</td>
-                        <td class="py-2 px-4 border">{{item.path}}</td>
+                        <td class="py-2 px-4 border"><a :href="item.path">{{item.name}}</a></td>
+                        <td class="py-2 px-4 border"><a :href="item.path">{{item.path}}</a></td>
                         <td class="py-2 px-4 border">{{item.read_only}}</td>
                         <td class="py-2 px-4 border">
                             <inertia-link v-if="item.read_only" class="border bg-indigo-300 rounded-xl px-4 py-2 m-4" :href="route('documents.edit', item.id)">

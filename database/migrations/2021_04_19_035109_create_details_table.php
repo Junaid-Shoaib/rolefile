@@ -15,6 +15,12 @@ class CreateDetailsTable extends Migration
     {
         Schema::create('details', function (Blueprint $table) {
             $table->id();
+            $table->date('date');
+            $table->string('voucher');
+            $table->string('particular');
+            $table->decimal('amount',14,2);
+            $table->json('cols');
+            $table->unsignedBigInteger('account_id')->nullable();
             $table->timestamps();
         });
     }

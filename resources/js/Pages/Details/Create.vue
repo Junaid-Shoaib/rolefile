@@ -1,0 +1,47 @@
+<template>
+    <app-layout>
+        <div class="">
+            <form @submit.prevent="submit">
+                <div class="p-8 -mr-6 -mb-8 flex flex-wrap">
+                    <input type="text" v-model="form.name" class="pr-6 pb-8 w-full lg:w-1/2" label="name"/>
+                    <div v-if="errors.name">{{ errors.name }}</div>
+                    <input type="text" v-model="form.path" class="pr-6 pb-8 w-full lg:w-1/2" label="path"/>
+                    <div v-if="errors.path">{{ errors.path }}</div>
+
+                </div>
+                <div class="px-8 py-4 bg-gray-100 border-t border-gray-200 flex justify-end items-center">
+                    <button class="border bg-indigo-300 rounded-xl px-4 py-2 m-4" type="submit">Create Detail</button>
+                </div>
+            </form>
+        </div>
+    </app-layout>
+</template>
+
+<script>
+    import AppLayout from '@/Layouts/AppLayout'
+
+    export default {
+        components: {
+            AppLayout,
+        },
+
+        props: {
+            errors : Object    
+        },
+
+        data() {
+            return {
+                form: this.$inertia.form({
+                    name: null,
+                    path: null,
+                    avatar: null,
+                }),
+            }
+        },
+        methods: {
+            submit() {
+                this.form.post(route('details.store'))
+            },
+        },
+    }
+</script>

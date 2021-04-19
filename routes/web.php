@@ -6,6 +6,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\First;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\DetailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -91,4 +92,34 @@ Route::put('documents/{document}', [DocumentController::class, 'update'])
 
 Route::delete('documents/{document}', [DocumentController::class, 'destroy'])
     ->name('documents.destroy')
+    ->middleware('auth');
+
+// Details
+
+Route::get('details', [DetailController::class, 'index'])
+    ->name('details')
+    ->middleware('auth');
+
+Route::get('details/create', [DetailController::class, 'create'])
+    ->name('details.create')
+    ->middleware('auth');
+
+Route::get('details/{detail}', [DetailController::class, 'show'])
+    ->name('details.show')
+    ->middleware('auth');
+
+Route::post('details', [DetailController::class, 'store'])
+    ->name('details.store')
+    ->middleware('auth');
+
+Route::get('details/{detail}/edit', [DetailController::class, 'edit'])
+    ->name('details.edit')
+    ->middleware('auth');
+
+Route::put('details/{detail}', [DetailController::class, 'update'])
+    ->name('details.update')
+    ->middleware('auth');
+
+Route::delete('details/{detail}', [DetailController::class, 'destroy'])
+    ->name('details.destroy')
     ->middleware('auth');

@@ -18,6 +18,7 @@ class DocumentController extends Controller
                 'id' => $document->id,
                 'name' => $document->name,
                 'path' => asset('storage/'.$document->year_id.'/'.$document->name),
+                // 'path' => asset($document->path),
                 'year_id' => $document->year_id,
                 'read_only' => true,
 

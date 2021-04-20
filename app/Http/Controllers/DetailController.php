@@ -37,25 +37,14 @@ class DetailController extends Controller
 
     public function store(Request $request)
     {
-        if($request->all())
-        {
-//            $path = $request->file('avatar');
-//            dd($path->path());
-            $year = Year::first()->id;
-            $name = $request->file('avatar')->getClientOriginalName();
-//            $extension = $request->file('avatar')->extension();
-            $path = $request->file('avatar')->storeAs('public/'.$year, $name);
- //           dd($path);
+        dd($request->all());
         Detail::create([
             'name' => $name,
             'path' => $path,
             'year_id' => $year,
         ]);
 
-        }
-
-            //        Post::create($request->all());
-        return Redirect::route('details')->with('success', 'Document created.');
+        return Redirect::route('details')->with('success', 'Detail created.');
     }
 
     public function show(Document $document)

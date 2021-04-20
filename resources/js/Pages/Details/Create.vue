@@ -3,10 +3,21 @@
         <div class="">
             <form @submit.prevent="submit">
                 <div class="p-8 -mr-6 -mb-8 flex flex-wrap">
-                    <input type="text" v-model="form.name" class="pr-6 pb-8 w-full lg:w-1/2" label="name"/>
-                    <div v-if="errors.name">{{ errors.name }}</div>
-                    <input type="text" v-model="form.path" class="pr-6 pb-8 w-full lg:w-1/2" label="path"/>
-                    <div v-if="errors.path">{{ errors.path }}</div>
+                    <div class="p-2 mr-2 mb-2 mt-4 ml-6 flex flex-wrap">
+                        <label class="w-28 inline-block text-right mr-4">Date:</label>
+                        <datepicker v-model="form.date" class="pr-2 pb-2 w-44 rounded-md leading-tight" label="date"/>
+                        <div v-if="errors.date">{{ errors.date }}</div>
+                    </div>
+                    <input type="text" v-model="form.voucher" class="pr-6 pb-8 w-full lg:w-1/2" label="voucher"/>
+                    <div v-if="errors.voucher">{{ errors.voucher }}</div>
+                    <input type="text" v-model="form.particular" class="pr-6 pb-8 w-full lg:w-1/2" label="particular"/>
+                    <div v-if="errors.particular">{{ errors.particular }}</div>
+                    <input type="text" v-model="form.amount" class="pr-6 pb-8 w-full lg:w-1/2" label="amount"/>
+                    <div v-if="errors.amount">{{ errors.amount }}</div>
+                    <input type="text" v-model="form.cols" class="pr-6 pb-8 w-full lg:w-1/2" label="cols"/>
+                    <div v-if="errors.cols">{{ errors.cols }}</div>
+                    <input type="text" v-model="form.account_id" class="pr-6 pb-8 w-full lg:w-1/2" label="account_id"/>
+                    <div v-if="errors.account_id">{{ errors.account_id }}</div>
 
                 </div>
                 <div class="px-8 py-4 bg-gray-100 border-t border-gray-200 flex justify-end items-center">
@@ -19,10 +30,12 @@
 
 <script>
     import AppLayout from '@/Layouts/AppLayout'
+    import Datepicker from 'vue3-datepicker'
 
     export default {
         components: {
             AppLayout,
+            Datepicker,
         },
 
         props: {
@@ -32,9 +45,12 @@
         data() {
             return {
                 form: this.$inertia.form({
-                    name: null,
-                    path: null,
-                    avatar: null,
+                    date: new Date(),
+                    voucher: null,
+                    particular: null,
+                    amount: null,
+                    cols: null,
+                    account_id: null,
                 }),
             }
         },

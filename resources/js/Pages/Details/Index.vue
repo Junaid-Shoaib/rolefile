@@ -18,7 +18,11 @@
                     <tr v-for="item in data" :key="item.id">
                         <td class="py-2 px-4 border">{{item.date}}</td>
                         <td class="py-2 px-4 border">{{item.voucher}}</td>
-                        <td class="py-2 px-4 border">{{item.cols}}</td>
+                        <td class="py-2 px-4 border">{{item.cols}}
+                            <ul v-for="col in item.cols" :key="col.id">
+                                <li>{{col.key}} - {{col.value}}</li>
+                            </ul>
+                        </td>
                         <td class="py-2 px-4 border">
                             <inertia-link class="border bg-indigo-300 rounded-xl px-4 py-2 m-4" :href="route('details.edit', item.id)">
                                 <span>Edit</span>

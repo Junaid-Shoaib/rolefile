@@ -31,20 +31,27 @@
                     <div class="p-2 mr-2 mb-2 mt-4 ml-6 flex flex-wrap">
                         <table class="table border">
                             <thead class="">
-                                <tr v-for='col in cols' :key="col.id">                            
+                                <tr>                            
                                     <th>
-                                    <input  v-model="col.name"  type="text" />
+                                    Key
+                                    </th>
+                                    <th>
+                                    Value
                                     </th>
                                 </tr>                        
                             </thead>
                             <tbody>
-                                <tr v-for='col in cols' :key="col.id">                            
+                                <tr v-for='(col, index) in form.cols' :key="col.id">                            
                                     <td>
-                                    <input  v-model="col.name"  type="text" />
+                                    <input  v-model="col.key"  type="text" />
+                                    </td>
+                                    <td>
+                                    <input  v-model="col.value"  type="text" />
                                     </td>
                                 </tr>                        
                             </tbody>
                         </table>
+
                     </div>
 
                 </div>
@@ -59,6 +66,7 @@
 <script>
     import AppLayout from '@/Layouts/AppLayout'
     import Datepicker from 'vue3-datepicker'
+    import format from 'date-fns/format'
 
     export default {
         components: {
@@ -77,7 +85,8 @@
                     voucher: null,
                     particular: null,
                     amount: null,
-                    cols: {'name':'hello','name':'world'},
+                    cols: [{key:'',value:''},{key:'',value:''}],
+
 //                    cols: Array,
                     account_id: null,
                 }),
@@ -85,6 +94,7 @@
         },
         methods: {
             submit() {
+                this.form.date = format(this.form.date,'yyyy-MM-dd')
                 this.form.post(route('details.store'))
             },
         },

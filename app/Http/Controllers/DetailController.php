@@ -37,11 +37,14 @@ class DetailController extends Controller
 
     public function store(Request $request)
     {
-        dd($request->all());
+//        dd($request->all());
         Detail::create([
-            'name' => $name,
-            'path' => $path,
-            'year_id' => $year,
+            'date' => $request->input('date'),
+            'voucher' => $request->input('voucher'),
+            'amount' => $request->input('amount'),
+            'account_id' => $request->input('account_id'),
+            'particular' => $request->input('particular'),
+            'cols' => $request->input('cols'),
         ]);
 
         return Redirect::route('details')->with('success', 'Detail created.');

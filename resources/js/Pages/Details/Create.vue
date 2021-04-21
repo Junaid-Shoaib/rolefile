@@ -24,14 +24,27 @@
                         <div v-if="errors.amount">{{ errors.amount }}</div>
                     </div>
                     <div class="p-2 mr-2 mb-2 mt-4 ml-6 flex flex-wrap">
-                        <label class="w-28 inline-block text-right mr-4">Cols:</label>
-                        <input type="text" v-model="form.cols" class="pr-6 pb-8 w-full lg:w-1/2" label="cols"/>
-                        <div v-if="errors.cols">{{ errors.cols }}</div>
-                    </div>
-                    <div class="p-2 mr-2 mb-2 mt-4 ml-6 flex flex-wrap">
                         <label class="w-28 inline-block text-right mr-4">Account ID:</label>
                         <input type="text" v-model="form.account_id" class="pr-6 pb-8 w-full lg:w-1/2" label="account_id"/>
                         <div v-if="errors.account_id">{{ errors.account_id }}</div>
+                    </div>
+                    <div class="p-2 mr-2 mb-2 mt-4 ml-6 flex flex-wrap">
+                        <table class="table border">
+                            <thead class="">
+                                <tr v-for='col in cols' :key="col.id">                            
+                                    <th>
+                                    <input  v-model="col.name"  type="text" />
+                                    </th>
+                                </tr>                        
+                            </thead>
+                            <tbody>
+                                <tr v-for='col in cols' :key="col.id">                            
+                                    <td>
+                                    <input  v-model="col.name"  type="text" />
+                                    </td>
+                                </tr>                        
+                            </tbody>
+                        </table>
                     </div>
 
                 </div>
@@ -64,8 +77,8 @@
                     voucher: null,
                     particular: null,
                     amount: null,
-//                    cols: {'key':'hello','value':'world'},
-                    cols: Array,
+                    cols: {'name':'hello','name':'world'},
+//                    cols: Array,
                     account_id: null,
                 }),
             }

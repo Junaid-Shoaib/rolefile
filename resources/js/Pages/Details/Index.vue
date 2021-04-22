@@ -8,6 +8,7 @@
             <table class="shadow-lg border m-4 rounded-xl">
                 <thead>
                     <tr class="bg-indigo-100">
+                        <th class="py-2 px-4 border">Index</th>
                         <th class="py-2 px-4 border">Date</th>
                         <th class="py-2 px-4 border">Voucher</th>
                         <th class="py-2 px-4 border">Cols</th>
@@ -15,11 +16,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="item in data" :key="item.id">
+                    <tr v-for="(item, i) in data" :key="i">
+                        <td class="py-2 px-4 border">{{i+1}}</td>
                         <td class="py-2 px-4 border">{{item.date}}</td>
                         <td class="py-2 px-4 border">{{item.voucher}}</td>
                         <td class="py-2 px-4 border">{{item.cols}}
-                            <ul v-for="col in item.cols" :key="col.id">
+                            <ul v-for="(col, j) in item.cols" :key="j">
                                 <li>{{col.key}} - {{col.value}}</li>
                             </ul>
                         </td>

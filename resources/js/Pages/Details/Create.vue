@@ -41,7 +41,7 @@
                                 </tr>                        
                             </thead>
                             <tbody>
-                                <tr v-for='(col, index) in form.cols' :key="col.id">                            
+                                <tr v-for='(col, i) in form.cols' :key="i">                            
                                     <td>
                                     <input  v-model="col.key"  type="text" />
                                     </td>

@@ -22,16 +22,16 @@
                         <td class="py-2 px-4 border">{{item.voucher}}</td>
                         <td class="py-2 px-4 border">{{item.cols}}
                             <ul v-for="(col, j) in item.cols" :key="j">
-                                <li>{{col.key}} - {{col.value}}</li>
+                                <li>{{j+1}} - {{col.key}} - {{col.value}}</li>
                             </ul>
                         </td>
                         <td class="py-2 px-4 border">
                             <inertia-link class="border bg-indigo-300 rounded-xl px-4 py-2 m-4" :href="route('details.edit', item.id)">
                                 <span>Edit</span>
-                            </inertia-link>        
+                            </inertia-link>
                             <button class="border bg-indigo-300 rounded-xl px-4 py-2 m-4" @click="destroy(item.id)">
                                 <span>Delete</span>
-                            </button>        
+                            </button>
                         </td>
                     </tr>
                 </tbody>

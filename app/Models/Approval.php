@@ -5,19 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Detail extends Model
+class Approval extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'date', 'voucher','particular','amount','cols','account_id'
+        'document_id','status'
     ];
 
     protected $casts = [
-        'cols' => 'array'
+        'status' => 'array'
     ];
 
-    public function account(){
-        return $this->belongsTo('App\Models\Account', 'account_id');
+    public function document(){
+        return $this->belongsTo('App\Models\Document', 'document_id');
     }
 }

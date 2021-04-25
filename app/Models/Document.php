@@ -17,4 +17,9 @@ class Document extends Model
         return $this->belongsTo('App\Models\Year', 'year_id');
     }
 
+    public function approval()
+    {
+        return $this->hasOne('App\Models\Approval', 'document_id');
+    }
+
 }

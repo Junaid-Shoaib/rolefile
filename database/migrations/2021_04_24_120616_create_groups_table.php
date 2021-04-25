@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDetailsTable extends Migration
+class CreateGroupsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,13 @@ class CreateDetailsTable extends Migration
      */
     public function up()
     {
-        Schema::create('details', function (Blueprint $table) {
+        Schema::create('groups', function (Blueprint $table) {
             $table->id();
-            $table->date('date');
-            $table->string('voucher');
-            $table->string('particular');
-            $table->decimal('amount',14,2);
-            $table->json('cols');
-            $table->unsignedBigInteger('account_id')->nullable();
+            $table->string('name');
+            $table->unsignedBigInteger('type_id');
+            $table->unsignedBigInteger('year_id');
+            $table->foreign('type_id')->references('id')->on('types');
+            $table->foreign('year_id')->references('id')->on('years');
             $table->timestamps();
         });
     }
@@ -32,6 +31,6 @@ class CreateDetailsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('details');
+        Schema::dropIfExists('groups');
     }
 }

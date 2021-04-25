@@ -4,9 +4,13 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\First;
+use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\YearController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\DetailController;
+use App\Http\Controllers\Excel;
+use App\Http\Controllers\Gen;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +37,66 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 })->name('dashboard');
 
 Route::get('first',First::class)->name('first')->middleware('auth');
+
+// Companies
+
+Route::get('companies', [CompanyController::class, 'index'])
+    ->name('companies')
+    ->middleware('auth');
+
+Route::get('companies/create', [CompanyController::class, 'create'])
+    ->name('companies.create')
+    ->middleware('auth');
+
+Route::get('companies/{company}', [CompanyController::class, 'show'])
+    ->name('companies.show')
+    ->middleware('auth');
+
+Route::post('companies', [CompanyController::class, 'store'])
+    ->name('companies.store')
+    ->middleware('auth');
+
+Route::get('companies/{company}/edit', [CompanyController::class, 'edit'])
+    ->name('companies.edit')
+    ->middleware('auth');
+
+Route::put('companies/{company}', [CompanyController::class, 'update'])
+    ->name('companies.update')
+    ->middleware('auth');
+
+Route::delete('companies/{company}', [CompanyController::class, 'destroy'])
+    ->name('companies.destroy')
+    ->middleware('auth');
+
+// Years
+
+Route::get('years', [YearController::class, 'index'])
+    ->name('years')
+    ->middleware('auth');
+
+Route::get('years/create', [YearController::class, 'create'])
+    ->name('years.create')
+    ->middleware('auth');
+
+Route::get('years/{year}', [YearController::class, 'show'])
+    ->name('years.show')
+    ->middleware('auth');
+
+Route::post('years', [YearController::class, 'store'])
+    ->name('years.store')
+    ->middleware('auth');
+
+Route::get('years/{year}/edit', [YearController::class, 'edit'])
+    ->name('years.edit')
+    ->middleware('auth');
+
+Route::put('years/{year}', [YearController::class, 'update'])
+    ->name('years.update')
+    ->middleware('auth');
+
+Route::delete('years/{year}', [YearController::class, 'destroy'])
+    ->name('years.destroy')
+    ->middleware('auth');
 
 // Users
 
@@ -123,3 +187,8 @@ Route::put('details/{detail}', [DetailController::class, 'update'])
 Route::delete('details/{detail}', [DetailController::class, 'destroy'])
     ->name('details.destroy')
     ->middleware('auth');
+
+// Excel
+
+Route::get('/excel', Excel::class)->name('excel')->middleware('auth');
+Route::get('/gen', Gen::class)->name('gen')->middleware('auth');

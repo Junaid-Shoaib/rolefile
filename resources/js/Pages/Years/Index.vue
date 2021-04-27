@@ -12,6 +12,7 @@
         <div v-if="$page.props.flash.success" class="bg-green-600 text-white">
             {{ $page.props.flash.success }}
         </div>
+        {{$page.props.yr_id}}
         <div class="relative mt-5 ml-7 flex-row">
             <div class="flex-1 inline-block">
                 <inertia-link class="border bg-indigo-300 rounded-xl px-4 py-1 m-1" :href="route('years.create')">Create

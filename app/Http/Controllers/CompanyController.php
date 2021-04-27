@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\Company;
 use App\Models\Year;
 use App\Models\Setting;
@@ -40,15 +41,33 @@ class CompanyController extends Controller
             'fiscal' => ['required'],
         ]);
 
-        Company::create([
-            'name' => Request::input('name'),
-            'address' => Request::input('address'),
-            'email' => Request::input('email'),
-            'web' => Request::input('web'),
-            'phone' => Request::input('phone'),
-            'fiscal' => Request::input('fiscal'),
-            'incorp' => Request::input('incorp'),
-        ]);
+        DB::transaction(function() {
+            $company = Company::create([
+                'name' => Request::input('name'),
+                'address' => Request::input('address'),
+                'email' => Request::input('email'),
+                'web' => Request::input('web'),
+                'phone' => Request::input('phone'),
+                'fiscal' => Request::input('fiscal'),
+                'incorp' => Request::input('incorp'),
+            ]);
+     
+            session(['company_id' => $company->id]);
+
+            if(!count(Auth::user()->settings()->get())){
+                Setting::create([
+                        'key' => 'active_company',
+                        'value' => session('company_id'),
+                        'user_id' => Auth::user()->id,
+                    ]);
+                }
+            else {
+                $active_co = Setting::where('user_id',Auth::user()->id)->where('key','active_company')->first();
+                $active_co->value = session('company_id');
+                $active_co->save();
+            }
+          
+        });
 
         return Redirect::route('companies')->with('success', 'Company created.');
 

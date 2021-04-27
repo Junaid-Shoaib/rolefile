@@ -39,7 +39,6 @@ class YearController extends Controller
         Request::validate([
             'begin' => ['required','date'],
             'end' => ['required','date'],
- //           'company_id' => ['required'],
         ]);
 
         DB::transaction(function() {
@@ -49,33 +48,19 @@ class YearController extends Controller
                 'company_id' => session('company_id'),
             ]);
 
-            if(!count(Auth::user()->settings()->get())){
-                Setting::create([
-                        'key' => 'active_company',
-                        'value' => session('company_id'),
-//                        'company_id' => Request::input('company_id'),
-                        'user_id' => Auth::user()->id,
-                    ]);
-
+            if(!Auth::user()->settings()->where('key','active_year')->first()){
                 Setting::create([
                         'key' => 'active_year',
                         'value' => $year->id,
-//                        'company_id' => Request::input('company_id'),
                         'user_id' => Auth::user()->id,
                     ]);
                 }
             else {
-//                $active_co = Setting::where('user_id',Auth::user()->id)->where('company_id',Request::input('company_id'))->where('key','active_company')->first();
-//                $active_yr = Setting::where('user_id',Auth::user()->id)->where('company_id',Request::input('company_id'))->where('key','active_year')->first();
-                $active_co = Setting::where('user_id',Auth::user()->id)->where('key','active_company')->first();
                 $active_yr = Setting::where('user_id',Auth::user()->id)->where('key','active_year')->first();
-                $active_co->value = session('company_id');
                 $active_yr->value = $year->id;
-                $active_co->save();
                 $active_yr->save();
             }
 
-//            session(['company_id' => Request::input('company_id')]);
             session(['year_id' => $year->id]);
         });
 
@@ -104,7 +89,6 @@ class YearController extends Controller
         Request::validate([
             'begin' => ['required'],
             'end' => ['required'],
-//            'company_id' => ['required'],
         ]);
 
         $year->begin = Request::input('begin');

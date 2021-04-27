@@ -20,6 +20,21 @@
                                 <jet-nav-link :href="route('dashboard')" :active="route().current('dashboard')">
                                     Dashboard
                                 </jet-nav-link>
+                                <jet-nav-link :href="route('companies')" :active="route().current('companies')">
+                                    Companies
+                                </jet-nav-link>
+                                <jet-nav-link :href="route('years')" :active="route().current('years')">
+                                    Years
+                                </jet-nav-link>
+                                <jet-nav-link :href="route('users')" :active="route().current('users')">
+                                    Users
+                                </jet-nav-link>
+                                <jet-nav-link :href="route('documents')" :active="route().current('documents')">
+                                    Documents
+                                </jet-nav-link>
+                                <jet-nav-link :href="route('details')" :active="route().current('details')">
+                                    Details
+                                </jet-nav-link>
                             </div>
                         </div>
 

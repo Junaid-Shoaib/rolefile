@@ -6,7 +6,7 @@
             </h2>
         </template>
         <div class="">
-            <form @submit.prevent="submit">
+            <form @submit.prevent="form.post(route('companies.store'))">
                 <div class="px-4 py-2 bg-gray-100 border-t border-gray-200 flex justify-start items-center">
                     <inertia-link class="border bg-indigo-300 rounded-xl px-4 py-1 m-1" :href="route('companies')">Back
                     </inertia-link>
@@ -52,7 +52,7 @@
                     <div v-if="errors.incorp">{{ errors.incorp }}</div>
                 </div>
                 <div class="px-4 py-2 bg-gray-100 border-t border-gray-200 flex justify-start items-center">
-                    <button class="border bg-indigo-300 rounded-xl px-4 py-2 ml-4 mt-4" type="submit">Create Company</button>
+                    <button class="border bg-indigo-300 rounded-xl px-4 py-2 ml-4 mt-4" type="submit" :disabled="form.processing">Create Company</button>
                 </div>
             </form>
         </div>
@@ -61,37 +61,31 @@
 
 <script>
     import AppLayout from '@/Layouts/AppLayout'
+    import { useForm } from '@inertiajs/inertia-vue3'
 
     export default {
         components: {
-            AppLayout,
+            AppLayout
         },
 
         props: {
             errors : Object,
-//            types : Object,  
-//            first: Object,  
         },
 
-        data() {
-            return {
-                form: this.$inertia.form({
-                    name: null,
-                    address: null,
-                    email: null,
-                    web: null,
-                    phone: null,
-                    fiscal: 'June',
-                    incorp: null,
- //                   type: this.first.id,
-                }),
-            }
-        },
 
-        methods: {
-            submit() {
-            this.$inertia.post(route('companies.store'), this.form)
-            },
+        setup () {
+            const form = useForm({
+                name: null,
+                address: null,
+                email: null,
+                web: null,
+                phone: null,
+                fiscal: 'June',
+                incorp: null,
+            })
+
+            return { form }
         },
+  
     }
 </script>

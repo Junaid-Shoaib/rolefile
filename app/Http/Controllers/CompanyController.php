@@ -116,27 +116,10 @@ class CompanyController extends Controller
     public function destroy(Company $company)
     {
         $company->delete();
+        session(['company_id' => Company::first()->id]);
         return Redirect::back()->with('success', 'Company deleted.');
     }
 
-    public function getBanks()
-    {
-        $data = Bank::all();
-        $sbank = 0;
-        return Inertia::render('Companies/Indexx', ['data' => $data, 'sbank' => $sbank]);
-    }
-
-    public function getBranches(Bank $bank)
-    {
-        $data = Bank::all();
-        $data2 = BankBranch::where('bank_id', $bank->id)->get();
-        return Inertia::render('Companies/Indexx', ['data' => $data,'data2' => $data2, 'sbank' => $bank->id]);
-    }
-
-    public function indexy()
-    {
-        return Inertia::render('Companies/Indexy');
-    }
 
     public function coch($id)
     {

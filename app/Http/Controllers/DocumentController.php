@@ -58,6 +58,25 @@ class DocumentController extends Controller
         return Redirect::route('documents')->with('success', 'Document created.');
     }
 
+    public function clone(Request $request)
+    {
+        $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('template.docx');
+        $templateProcessor->setValue('firstname', 'Sohail');
+        $templateProcessor->setValue('lastname', 'Saleem');
+        $templateProcessor->saveAs('MyWordFile.docx');
+            $year = Year::first()->id;
+            $name = $request->file('avatar')->getClientOriginalName();
+            $path = $request->file('avatar')->storeAs('public/'.$year, $name);
+        Document::create([
+            'name' => $name,
+            'path' => $path,
+            'year_id' => $year,
+        ]);
+
+        return Redirect::route('documents')->with('success', 'Document cloned.');
+    }
+
+
     public function show(Document $document)
     {
         //

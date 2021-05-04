@@ -60,16 +60,16 @@ class DocumentController extends Controller
 
     public function clone(Request $request)
     {
-        $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('template.docx');
-        $templateProcessor->setValue('firstname', 'Sohail');
-        $templateProcessor->setValue('lastname', 'Saleem');
-        $templateProcessor->saveAs('MyWordFile.docx');
             $year = Year::first()->id;
-            $name = $request->file('avatar')->getClientOriginalName();
-            $path = $request->file('avatar')->storeAs('public/'.$year, $name);
+        $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('template.docx');
+        $templateProcessor->setValue('firstname', 'Saleena');
+        $templateProcessor->setValue('lastname', 'Sohail');
+        $templateProcessor->saveAs('storage/'.$year.'/MyWordFile.docx');
+            // $name = $request->file('avatar')->getClientOriginalName();
+            // $path = $request->file('avatar')->storeAs('public/'.$year, $name);
         Document::create([
-            'name' => $name,
-            'path' => $path,
+            'name' => 'MyWordFile.docx',
+            'path' => 'public/'.$year.'/MyWordFile.docx',
             'year_id' => $year,
         ]);
 

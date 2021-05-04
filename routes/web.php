@@ -158,7 +158,11 @@ Route::delete('documents/{document}', [DocumentController::class, 'destroy'])
     ->name('documents.destroy')
     ->middleware('auth');
 
-// Details
+Route::get('/clone', [DocumentController::class, 'clone'])
+    ->name('clone')
+    ->middleware('auth');
+
+    // Details
 
 Route::get('details', [DetailController::class, 'index'])
     ->name('details')

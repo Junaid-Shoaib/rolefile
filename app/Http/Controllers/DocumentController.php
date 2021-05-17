@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Redirect;
 use App\Models\Document;
 use App\Models\Year;
+use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
@@ -28,6 +29,37 @@ class DocumentController extends Controller
         return Inertia::render('Documents/Index', [
             'data' => $data,
             ]);
+    }
+
+    public function indexx(Request $request)
+    {
+
+        $request->validate([
+            'direction' => ['in:asc,desc'],
+            'field' => ['in:id,name,email'],
+        ]);
+
+        $query = User::query();
+
+        if(request('search')){
+            $query->where('name','LIKE','%'.request('search').'%');
+        }
+
+        if(request()->has(['field','direction'])){
+            $query->orderBy(request('field'),request('direction'));
+        }
+        
+//dd($query);
+$usr = $query->paginate();
+//dd($usr);
+        return Inertia::render('Documents/Indexx', [
+            'docs' => Document::when($request->term, function($query, $term){
+                $query->where('name', 'LIKE', '%'.$term.'%');
+            })->paginate(),
+
+            'users' => $query->paginate(),
+            'filters' => request()->all(['search','field','direction']), 
+        ]);
     }
 
     public function create()

@@ -162,6 +162,10 @@ Route::get('/clone', [DocumentController::class, 'clone'])
     ->name('clone')
     ->middleware('auth');
 
+Route::get('/indexx', [DocumentController::class, 'indexx'])
+    ->name('indexx')
+    ->middleware('auth');
+
     // Details
 
 Route::get('details', [DetailController::class, 'index'])

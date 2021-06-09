@@ -59,6 +59,26 @@ $usr = $query->paginate();
 
             'users' => $query->paginate(),
             'filters' => request()->all(['search','field','direction']), 
+
+            'optionss' => [
+                ['id' => 1,  'label' => 'hello', 'isFolder' => false],
+                ['id' => 2,  'label' => 'world', 'isFolder' => false],
+                ['id' => 3,  'label' => 'haha', 'isFolder' => true, 'children' => [
+                    ['id' => 4, 'label' => 'child 1', 'isFolder' => false],
+                    ['id' => 5, 'label' => 'child 2', 'isFolder' => false],
+                ]],
+
+            ],
+
+            'docopt' => Document::all()->map(function($document){
+                return [
+                    'id' => $document->id,
+                    'label' => $document->name,
+                    'path' => asset('storage/'.$document->year_id.'/'.$document->name),
+                    'year_id' => $document->year_id,
+                ];
+            })->toArray(),
+
         ]);
     }
 

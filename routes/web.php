@@ -68,6 +68,10 @@ Route::delete('companies/{company}', [CompanyController::class, 'destroy'])
     ->name('companies.destroy')
     ->middleware('auth');
 
+Route::get('companies/{company}', [CompanyController::class, 'coch'])
+    ->name('companies.coch')
+    ->middleware('auth');
+
 // Years
 
 Route::get('years', [YearController::class, 'index'])

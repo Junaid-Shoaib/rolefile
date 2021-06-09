@@ -24,7 +24,14 @@ class CompanyController extends Controller
 {
     public function index()
     {
-        $data = Company::all();
+        $data = Company::paginate(5)
+            ->through(fn($company) => [
+            'id' => $company->id,
+            'name' => $company->name,
+            'address' => $company->address,
+            'fiscal' => $company->fiscal, 
+        ]);
+//        dd($data);
         return Inertia::render('Companies/Index', ['data' => $data]);
     }
 
@@ -123,6 +130,7 @@ class CompanyController extends Controller
 
     public function coch($id)
     {
+        dd($id);
         $active_co = Setting::where('user_id',Auth::user()->id)->where('key','active_company')->first();
         $active_yr = Setting::where('user_id',Auth::user()->id)->where('key','active_year')->first();
         $active_co->value = $id;

@@ -1,7 +1,7 @@
 <template>
 
   <div id="app">
-    <treeselect v-model="value" :multiple="true" :options="options" />
+    <treeselect v-model="value" :multiple="false" :options="docopt" v-on:select="treeChange"/>
   </div>
 
   <div class="bg-green-100 shadow mx-auto lg:max-w-4xl">
@@ -73,6 +73,8 @@
       docs : Object,
       users : Object,
       filters : Object,
+      optionss : Object,
+      docopt : Object,
     },
 
     data() {
@@ -82,20 +84,23 @@
 
         options: [ {
           id: 'a',
-          label: 'a',
+          label: 'apple',
+          isFolder: false,
           children: [ {
             id: 'aa',
-            label: 'aa',
+            label: 'appie',
+            isFolder: true,
           }, {
             id: 'ab',
-            label: 'ab',
+            label: 'abbie',
+            isDisabled: true,
           } ],
         }, {
           id: 'b',
-          label: 'b',
+          label: 'ball',
         }, {
           id: 'c',
-          label: 'c',
+          label: 'cat',
         } ],
 
         term: '',
@@ -118,6 +123,10 @@
       sort(field){
         this.params.field = field;
         this.params.direction = this.params.direction === 'asc'? 'desc' : 'asc';
+      },
+
+      treeChange(node, instanceId){
+        alert(node.path + '---' + node.id*2)
       },
 
     },

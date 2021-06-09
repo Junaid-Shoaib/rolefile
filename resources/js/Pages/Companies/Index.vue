@@ -24,7 +24,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="item in data" :key="item.id">
+                    <tr v-for="item in data.data" :key="item.id">
                         <td class="py-1 px-4 border">{{item.name}}</td>
                         <td class="py-1 px-4 border">{{item.address}}</td>
                         <td class="py-1 px-4 border">{{item.fiscal}}</td>
@@ -39,17 +39,20 @@
                     </tr>
                 </tbody>
             </table>
-        </div>
+            <pagination class="mt-6" :links="data.links" />
+            </div>
 
     </app-layout>
 </template>
 
 <script>
     import AppLayout from '@/Layouts/AppLayout'
+    import Pagination from '@/Shared/Pagination' 
  
  export default {
         components: {
             AppLayout,
+            Pagination,
         },
 
         props: ['data'],

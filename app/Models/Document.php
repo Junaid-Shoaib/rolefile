@@ -10,7 +10,7 @@ class Document extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name','path','enabled','year_id'
+        'name','path','enabled','year_id','is_folder'
     ];
 
     public function year(){

@@ -1,17 +1,17 @@
 <template>
 
-  <div id="app">
-    <treeselect v-model="value" :multiple="false" :options="docopt" v-on:select="treeChange"/>
+  <div id="app" class="w-60 float-left">
+    <treeselect v-model="value" :multiple="false" :alwaysOpen="true" :options="docopt" v-on:select="treeChange"/>
   </div>
 
-  <div class="bg-green-100 shadow mx-auto lg:max-w-4xl">
+  <!-- <div class="bg-green-100 shadow mx-auto lg:max-w-4xl">
 
     <div class="p-5">
       <label for="search">Search</label>
       <input id="search" type='text' v-model="term" @keyup="search" class="px-2 ml-2 text-sm rounded-lg border">
-    </div>
+    </div> -->
 
-    <table class="w-full">
+    <!-- <table class="w-full">
       <tr class="bg-gray-900 text-white">
         <th class="px-2 py-1 text-sm font-bold text-left">ID</th>
         <th class="px-2 py-1 text-sm font-bold text-left">Name</th>
@@ -27,12 +27,12 @@
     <div class="p-5 flex justify-end">
       <inertia-link class="px-2" :href="docs.prev_page_url">Previous</inertia-link>
       <inertia-link class="px-2" :href="docs.next_page_url">Next</inertia-link>
-    </div>
+    </div> -->
 
-  </div>
+  <!-- </div> -->
   
 
-  <div class="bg-green-100 shadow mx-auto lg:max-w-4xl">
+  <!-- <div class="bg-green-100 shadow mx-auto lg:max-w-4xl">
 
     <div class="p-5">
       <label for="search2">Search 2</label>
@@ -57,7 +57,7 @@
       <inertia-link class="px-2" :href="users.next_page_url">Next</inertia-link>
     </div>
 
-  </div>
+  </div> -->
 
 </template>
  
@@ -70,10 +70,10 @@
     components: { Treeselect },
 
     props: {
-      docs : Object,
-      users : Object,
-      filters : Object,
-      optionss : Object,
+      // docs : Object,
+      // users : Object,
+      // filters : Object,
+      // optionss : Object,
       docopt : Object,
     },
 
@@ -82,48 +82,48 @@
 
         value: null,
 
-        options: [ {
-          id: 'a',
-          label: 'apple',
-          isFolder: false,
-          children: [ {
-            id: 'aa',
-            label: 'appie',
-            isFolder: true,
-          }, {
-            id: 'ab',
-            label: 'abbie',
-            isDisabled: true,
-          } ],
-        }, {
-          id: 'b',
-          label: 'ball',
-        }, {
-          id: 'c',
-          label: 'cat',
-        } ],
+        // options: [ {
+        //   id: 'a',
+        //   label: 'apple',
+        //   isFolder: false,
+        //   children: [ {
+        //     id: 'aa',
+        //     label: 'appie',
+        //     isFolder: true,
+        //   }, {
+        //     id: 'ab',
+        //     label: 'abbie',
+        //     isDisabled: true,
+        //   } ],
+        // }, {
+        //   id: 'b',
+        //   label: 'ball',
+        // }, {
+        //   id: 'c',
+        //   label: 'cat',
+        // } ],
 
-        term: '',
+        // term: '',
 
-        params: {
-          search: this.filters.search,
-          field: this.filters.field,
-          direction: this.filters.direction,
-        },
+        // params: {
+        //   search: this.filters.search,
+        //   field: this.filters.field,
+        //   direction: this.filters.direction,
+        // },
 
       }
     },
 
     methods:{
 
-      search: _.throttle(function(){
-        this.$inertia.replace(route('indexx', {term:this.term}))
-      }, 500),
+      // search: _.throttle(function(){
+      //   this.$inertia.replace(route('indexx', {term:this.term}))
+      // }, 500),
 
-      sort(field){
-        this.params.field = field;
-        this.params.direction = this.params.direction === 'asc'? 'desc' : 'asc';
-      },
+      // sort(field){
+      //   this.params.field = field;
+      //   this.params.direction = this.params.direction === 'asc'? 'desc' : 'asc';
+      // },
 
       treeChange(node, instanceId){
         alert(node.path + '---' + node.id*2)
@@ -131,15 +131,15 @@
 
     },
 
-    watch: {
-      params: {
-        handler: _.throttle(function() {
-          let params = _.pickBy(this.params); //removes unnecessary params from url
-          this.$inertia.get(route('indexx'), params, {replace:true, preserveState:true});
-        }, 200),
-        deep: true,
-      },
-    },
+    // watch: {
+    //   params: {
+    //     handler: _.throttle(function() {  // this will control the speed of change detection
+    //       let params = _.pickBy(this.params); //removes unnecessary params from url
+    //       this.$inertia.get(route('indexx'), params, {replace:true, preserveState:true});
+    //     }, 200),
+    //     deep: true, // this will make sure to detect any change within elements deep in array
+    //   },
+    // },
   }
   
   </script> 

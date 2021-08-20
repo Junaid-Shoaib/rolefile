@@ -8,78 +8,24 @@ use App\Models\Document;
 use App\Models\Year;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class DocumentController extends Controller
 {
     public function index(Request $request)
     {
-        $data = Document::all()->map(function($document){
+        $data = Document::where('year_id',session('year_id'))->get()->map(function($document){
             return [
                 'id' => $document->id,
+                'label' => $document->name,
                 'name' => $document->name,
                 'path' => asset('storage/'.$document->year_id.'/'.$document->name),
-                // 'path' => asset($document->path),
                 'year_id' => $document->year_id,
-                'read_only' => true,
-
+                'is_folder' => $document->is_folder,
             ];
         });
-//dd($data);
-        return Inertia::render('Documents/Index', [
-            'data' => $data,
-            ]);
-    }
-
-    public function indexx(Request $request)
-    {
-
-        $request->validate([
-            'direction' => ['in:asc,desc'],
-            'field' => ['in:id,name,email'],
-        ]);
-
-        $query = User::query();
-
-        if(request('search')){
-            $query->where('name','LIKE','%'.request('search').'%');
-        }
-
-        if(request()->has(['field','direction'])){
-            $query->orderBy(request('field'),request('direction'));
-        }
-        
-//dd($query);
-$usr = $query->paginate();
-//dd($usr);
-        return Inertia::render('Documents/Indexx', [
-            'docs' => Document::when($request->term, function($query, $term){
-                $query->where('name', 'LIKE', '%'.$term.'%');
-            })->paginate(),
-
-            'users' => $query->paginate(),
-            'filters' => request()->all(['search','field','direction']), 
-
-            'optionss' => [
-                ['id' => 1,  'label' => 'hello', 'isFolder' => false],
-                ['id' => 2,  'label' => 'world', 'isFolder' => false],
-                ['id' => 3,  'label' => 'haha', 'isFolder' => true, 'children' => [
-                    ['id' => 4, 'label' => 'child 1', 'isFolder' => false],
-                    ['id' => 5, 'label' => 'child 2', 'isFolder' => false],
-                ]],
-
-            ],
-
-            'docopt' => Document::all()->map(function($document){
-                return [
-                    'id' => $document->id,
-                    'label' => $document->name,
-                    'path' => asset('storage/'.$document->year_id.'/'.$document->name),
-                    'year_id' => $document->year_id,
-                ];
-            })->toArray(),
-
-        ]);
+        return Inertia::render('Documents/Index', ['data' => $data,]);
     }
 
     public function create()
@@ -91,43 +37,40 @@ $usr = $query->paginate();
     {
         if($request->all())
         {
-//            $path = $request->file('avatar');
-//            dd($path->path());
-            $year = Year::first()->id;
-            $name = $request->file('avatar')->getClientOriginalName();
-//            $extension = $request->file('avatar')->extension();
-            $path = $request->file('avatar')->storeAs('public/'.$year, $name);
- //           dd($path);
-        Document::create([
-            'name' => $name,
-            'path' => $path,
-            'year_id' => $year,
-        ]);
-
+            DB::transaction(function() use($request){
+                $year = session('year_id');
+                $name = $request->file('avatar')->getClientOriginalName();
+                $path = $request->file('avatar')->storeAs('public/'.$year, $name);
+    //            $path = Storage::disk('google')->put($name, file_get_contents($request->file('avatar')));
+    //            dd($path);
+                Document::create([
+                    'name' => $name,
+                    'path' => $path,
+                    'year_id' => $year,
+                ]);
+            });
         }
-
-            //        Post::create($request->all());
         return Redirect::route('documents')->with('success', 'Document created.');
     }
 
-    public function clone(Request $request)
+    public function folder(Request $request)
     {
-            $year = Year::first()->id;
-        $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('template.docx');
-        $templateProcessor->setValue('firstname', 'Saleena');
-        $templateProcessor->setValue('lastname', 'Sohail');
-        $templateProcessor->saveAs('storage/'.$year.'/MyWordFile.docx');
-            // $name = $request->file('avatar')->getClientOriginalName();
-            // $path = $request->file('avatar')->storeAs('public/'.$year, $name);
-        Document::create([
-            'name' => 'MyWordFile.docx',
-            'path' => 'public/'.$year.'/MyWordFile.docx',
-            'year_id' => $year,
-        ]);
-
-        return Redirect::route('documents')->with('success', 'Document cloned.');
+        if($request->all())
+        {
+            DB::transaction(function() use($request){
+                $year = session('year_id');
+                $name = $request->name;
+                Storage::makeDirectory('public/'.$year.'/'.$name);
+                Document::create([
+                    'name' => $name,
+                    'path' => 'public/'.$year.'/'.$name,
+                    'year_id' => $year,
+                    'is_folder' => 1,
+                ]);
+            });
+        }
+        return Redirect::route('documents')->with('success', 'Folder created.');
     }
-
 
     public function show(Document $document)
     {
@@ -154,12 +97,89 @@ $usr = $query->paginate();
             ])
         );
 
-        return Redirect::route('documents')->with('success', 'User updated.');
+        return Redirect::route('documents')->with('success', 'Doc updated.');
     }
 
     public function destroy(Document $document)
     {
-        $document->delete();
-        return Redirect::back()->with('success', 'User deleted.');
+        DB::transaction(function() use($document){
+            if($document->is_folder){
+                Storage::deleteDirectory($document->path);
+            }
+            else{
+                Storage::delete($document->path);
+            }
+            $document->delete();
+        });
+        return Redirect::back()->with('success', 'Document deleted.');
     }
+
+    // public function clone(Request $request)
+    // {
+    //     $year = Year::first()->id;
+    //     $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('template.docx');
+    //     $templateProcessor->setValue('firstname', 'Sohail');
+    //     $templateProcessor->setValue('lastname', 'Saleem');
+    //     $templateProcessor->saveAs('storage/'.$year.'/MyWordFile.docx');
+    //         // $name = $request->file('avatar')->getClientOriginalName();
+    //         // $path = $request->file('avatar')->storeAs('public/'.$year, $name);
+    //     Document::create([
+    //         'name' => 'MyWordFile.docx',
+    //         'path' => 'public/'.$year.'/MyWordFile.docx',
+    //         'year_id' => $year,
+    //     ]);
+
+    //     return Redirect::route('documents')->with('success', 'Document cloned.');
+    // }
+
+    // public function indexx(Request $request)
+    // {
+
+        // $request->validate([
+        //     'direction' => ['in:asc,desc'],
+        //     'field' => ['in:id,name,email'],
+        // ]);
+
+        // $query = User::query();
+
+        // if(request('search')){
+        //     $query->where('name','LIKE','%'.request('search').'%');
+        // }
+
+        // if(request()->has(['field','direction'])){
+        //     $query->orderBy(request('field'),request('direction'));
+        // }
+        
+//dd($query);
+//$usr = $query->paginate();
+//dd($usr);
+        // return Inertia::render('Documents/Indexx', [
+            // 'docs' => Document::when($request->term, function($query, $term){
+            //     $query->where('name', 'LIKE', '%'.$term.'%');
+            // })->paginate(),
+
+            // 'users' => $query->paginate(),
+            // 'filters' => request()->all(['search','field','direction']), 
+
+            // 'optionss' => [
+            //     ['id' => 1,  'label' => 'hello', 'isFolder' => false],
+            //     ['id' => 2,  'label' => 'world', 'isFolder' => false],
+            //     ['id' => 3,  'label' => 'haha', 'isFolder' => true, 'children' => [
+            //         ['id' => 4, 'label' => 'child 1', 'isFolder' => false],
+            //         ['id' => 5, 'label' => 'child 2', 'isFolder' => false],
+            //     ]],
+
+            // ],
+
+    //         'docopt' => Document::all()->map(function($document){
+    //             return [
+    //                 'id' => $document->id,
+    //                 'label' => $document->name,
+    //                 'path' => asset('storage/'.$document->year_id.'/'.$document->name),
+    //                 'year_id' => $document->year_id,
+    //             ];
+    //         }),
+
+    //     ]);
+    // }
 }

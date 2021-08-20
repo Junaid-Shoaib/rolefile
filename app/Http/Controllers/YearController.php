@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use App\Models\Year;
 use App\Models\Company;
@@ -47,6 +48,8 @@ class YearController extends Controller
                 'end' => Request::input('end'),
                 'company_id' => session('company_id'),
             ]);
+
+            Storage::makeDirectory('public/'.$year->id);
 
             if(!Auth::user()->settings()->where('key','active_year')->first()){
                 Setting::create([

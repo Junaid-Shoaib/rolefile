@@ -11,6 +11,7 @@ use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\DetailController;
 use App\Http\Controllers\Excel;
 use App\Http\Controllers\Gen;
+// use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -162,13 +163,17 @@ Route::delete('documents/{document}', [DocumentController::class, 'destroy'])
     ->name('documents.destroy')
     ->middleware('auth');
 
-Route::get('/clone', [DocumentController::class, 'clone'])
-    ->name('clone')
+Route::post('folder', [DocumentController::class, 'folder'])
+    ->name('folder')
     ->middleware('auth');
 
-Route::get('/indexx', [DocumentController::class, 'indexx'])
-    ->name('indexx')
-    ->middleware('auth');
+// Route::get('/clone', [DocumentController::class, 'clone'])
+//     ->name('clone')
+//     ->middleware('auth');
+
+// Route::get('/indexx', [DocumentController::class, 'indexx'])
+//     ->name('indexx')
+//     ->middleware('auth');
 
     // Details
 
@@ -204,3 +209,10 @@ Route::delete('details/{detail}', [DetailController::class, 'destroy'])
 
 Route::get('/excel', Excel::class)->name('excel')->middleware('auth');
 Route::get('/gen', Gen::class)->name('gen')->middleware('auth');
+
+
+// Google drive
+
+// Route::get('test', function() {
+//     Storage::disk('google')->put('test2.txt', 'Hello World2');
+// });

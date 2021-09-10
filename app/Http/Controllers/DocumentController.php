@@ -15,17 +15,51 @@ class DocumentController extends Controller
 {
     public function index(Request $request)
     {
-        $data = Document::where('year_id',session('year_id'))->get()->map(function($document){
+        $data = null;
+        $rootID = Document::where('year_id',session('year_id'))->where('name',session('year_id'))->first()->id;
+        $exeID = Document::where('parent_id',$rootID)->where('name','Execution')->first()->id;
+
+        $exe = Document::where('parent_id',$exeID)->get()->map(function($document){
             return [
                 'id' => $document->id,
                 'label' => $document->name,
-                'name' => $document->name,
-                'path' => asset('storage/'.$document->year_id.'/'.$document->name),
-                'year_id' => $document->year_id,
-                'is_folder' => $document->is_folder,
+            ];
+        })->toArray();
+
+        $fold = Document::where('parent_id',$rootID)->get()->map(function($document) use ($exe) {
+            return [
+                'id' => $document->id,
+                'label' => $document->name,
+                'children' => ($document->name == 'Execution')? $exe:null,
             ];
         });
-        return Inertia::render('Documents/Index', ['data' => $data,]);
+
+        if($request->input('fold')){
+            $data = Document::where('year_id',session('year_id'))->where('parent_id',$request->input('fold'))->get()->map(function($document){
+                return [
+                    'id' => $document->id,
+                    'label' => $document->name,
+                    'name' => $document->name,
+                    'path' => asset('storage/'.$document->path),
+                    'year_id' => $document->year_id,
+                    'is_folder' => $document->is_folder,
+                    'parent_id' => $document->parent_id,
+                ];
+            });
+            session(['parent_id'=>$request->input('fold')]);
+        }
+        else{
+            $data = Document::where('year_id',session('year_id'))->get()->map(function($document){
+                return [
+                    'id' => $document->id,
+                    'name' => $document->name,
+                ];
+            });
+        }
+        return Inertia::render('Documents/Index', [
+            'data' => $data,
+            'fold' => $fold,
+        ]);
     }
 
     public function create()
@@ -38,15 +72,17 @@ class DocumentController extends Controller
         if($request->all())
         {
             DB::transaction(function() use($request){
+                $folder = Document::where('id',session('parent_id'))->first();
                 $year = session('year_id');
                 $name = $request->file('avatar')->getClientOriginalName();
-                $path = $request->file('avatar')->storeAs('public/'.$year, $name);
+                $path = $request->file('avatar')->storeAs('public/'.$folder->path, $name);
     //            $path = Storage::disk('google')->put($name, file_get_contents($request->file('avatar')));
     //            dd($path);
                 Document::create([
                     'name' => $name,
-                    'path' => $path,
+                    'path' => $folder->path.'/'.$name,
                     'year_id' => $year,
+                    'parent_id' => $folder->id
                 ]);
             });
         }
@@ -58,14 +94,16 @@ class DocumentController extends Controller
         if($request->all())
         {
             DB::transaction(function() use($request){
+                $parent = session('parent_id');
                 $year = session('year_id');
                 $name = $request->name;
-                Storage::makeDirectory('public/'.$year.'/'.$name);
+                Storage::makeDirectory('public/'.$year.'/Execution/'.$name);
                 Document::create([
                     'name' => $name,
-                    'path' => 'public/'.$year.'/'.$name,
+                    'path' => $year.'/Execution/'.$name,
                     'year_id' => $year,
                     'is_folder' => 1,
+                    'parent_id' => $parent,
                 ]);
             });
         }
@@ -102,16 +140,17 @@ class DocumentController extends Controller
 
     public function destroy(Document $document)
     {
+        $isFolder = $document->is_folder; 
         DB::transaction(function() use($document){
             if($document->is_folder){
-                Storage::deleteDirectory($document->path);
+                Storage::deleteDirectory('public/'.$document->path);
             }
             else{
-                Storage::delete($document->path);
+                Storage::delete('public/'.$document->path);
             }
             $document->delete();
         });
-        return Redirect::back()->with('success', 'Document deleted.');
+        return Redirect::back()->with('success', ($isFolder)?'Folder deleted':'Document deleted.');
     }
 
     // public function clone(Request $request)

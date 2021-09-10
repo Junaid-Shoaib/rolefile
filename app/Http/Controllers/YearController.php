@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use App\Models\Year;
 use App\Models\Company;
+use App\Models\Document;
 use App\Models\Setting;
 
 class YearController extends Controller
@@ -51,6 +52,69 @@ class YearController extends Controller
 
             Storage::makeDirectory('public/'.$year->id);
 
+            $root = Document::create([
+                'name' => $year->id,
+                'path' => $year->id,
+                'year_id' => $year->id,
+                'is_folder' => 1,
+                'parent_id' => null,
+            ]);
+
+            $folders = [
+                'Planning',
+                'Execution',
+                'Completion',
+                'Miscellaneous',
+            ];
+
+            $heads = [
+                'Fixed Assets',
+                'Long Term Deposits',
+                'Stock in Trade',
+                'Trade Debts',
+                'Advance Deposits & Prepayments',
+                'Loans and Advances',
+                'Cash and Bank Balances',
+                'Share Capital',
+                'Reserves',
+                'Long Term Loans',
+                'Deferred Liabilities',
+                'Trade and Other Payables',
+                'Short Term Borrowings',
+                'Loans and Advances',
+                'Revenue',
+                'Direct Costs',
+                'Administrative and Genernal Expenses',
+                'Selling and Distribution Expenses',
+                'Other Income',
+                'Financial Charges',
+                'Other Operating Charges',
+                'Taxation',
+            ];
+
+            for($i=0;$i<count($folders);$i++){
+                Storage::makeDirectory('public/'.$year->id.'/'.$folders[$i]);
+                $folder = Document::create([
+                    'name' => $folders[$i],
+                    'path' => $year->id.'/'.$folders[$i],
+                    'year_id' => $year->id,
+                    'is_folder' => 1,
+                    'parent_id' => $root->id,
+                    ]);
+                if($folder->name == 'Execution'){
+                for($j=0;$j<count($heads);$j++){
+                    Storage::makeDirectory('public/'.$year->id.'/Execution/'.$heads[$j]);
+                    Document::create([
+                        'name' => $heads[$j],
+                        'path' => $year->id.'/Execution/'.$heads[$j],
+                        'year_id' => $year->id,
+                        'is_folder' => 1,
+                        'parent_id' => $folder->id,
+                        ]);
+                    }
+                }
+            }
+
             if(!Auth::user()->settings()->where('key','active_year')->first()){
                 Setting::create([
                         'key' => 'active_year',
@@ -63,7 +127,7 @@ class YearController extends Controller
                 $active_yr->value = $year->id;
                 $active_yr->save();
             }
-
+            session(['parent_id'=>$root->id]);
             session(['year_id' => $year->id]);
         });
 

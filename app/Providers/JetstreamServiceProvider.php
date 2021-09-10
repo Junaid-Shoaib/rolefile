@@ -5,7 +5,7 @@ namespace App\Providers;
 use App\Actions\Jetstream\DeleteUser;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Jetstream\Jetstream;
-
+use App\Models\Document;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -41,8 +41,10 @@ class JetstreamServiceProvider extends ServiceProvider
                 Hash::check($request->password, $user->password)) {
                 if($user->settings()->where('key','active_company')->first())
                     session(['company_id'=>$user->settings()->where('key','active_company')->first()->value]);
-                if($user->settings()->where('key','active_year')->first())
+                if($user->settings()->where('key','active_year')->first()){
                     session(['year_id'=>$user->settings()->where('key','active_year')->first()->value]);
+                    session(['parent_id'=>Document::where('name',session('year_id'))->first()->name]);
+                }
                 return $user;
             }
         });

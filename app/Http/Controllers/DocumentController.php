@@ -50,7 +50,7 @@ class DocumentController extends Controller
             Inertia::share('parent_id',session('parent_id'));
         }
         else{
-            $data = Document::where('parent_id',$rootID)->get()->map(function($document){
+            $data = Document::where('parent_id',session('parent_id'))->get()->map(function($document){
                 return [
                     'id' => $document->id,
                     'name' => $document->name,

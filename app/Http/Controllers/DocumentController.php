@@ -47,18 +47,22 @@ class DocumentController extends Controller
                 ];
             });
             session(['parent_id'=>$request->input('fold')]);
+            Inertia::share('parent_id',session('parent_id'));
         }
         else{
-            $data = Document::where('year_id',session('year_id'))->get()->map(function($document){
+            $data = Document::where('parent_id',$rootID)->get()->map(function($document){
                 return [
                     'id' => $document->id,
                     'name' => $document->name,
+                    'is_folder' => $document->is_folder,
                 ];
             });
         }
         return Inertia::render('Documents/Index', [
             'data' => $data,
             'fold' => $fold,
+            'show_folder' => ($exeID == $request->input('fold')) ? true : false,
+            'show_upload' => (($exeID == $request->input('fold')) || (session('parent_id') == $rootID)) ? false : true,
         ]);
     }
 

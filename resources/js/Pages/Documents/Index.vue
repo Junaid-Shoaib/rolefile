@@ -4,16 +4,16 @@
             {{ $page.props.flash.success }}
         </div>
         <div>
-        {{$page.props.parent_id}}
+        {{$page.props.year_id}} - {{$page.props.parent_id}}
         </div>
         <div class="m-2">
-            <button @click="create" class="inline-block border rounded-lg ml-2 p-2 bg-gray-600 hover:bg-gray-700 text-green-300 hover:text-green-200 m-2">Upload File</button>
+            <button v-if="show_upload" @click="create" class="inline-block border rounded-lg ml-2 p-2 bg-gray-600 hover:bg-gray-700 text-green-300 hover:text-green-200 m-2">Upload File</button>
             <form @submit.prevent="form.post('/folder',{
                         preserveState: false,
                     })" class="inline-block">
-                <input type="text" v-model="form.name" class="border border-gray-300 rounded-lg ml-2" placeholder="Enter Folder Name">
+                <input v-if="show_folder" type="text" v-model="form.name" class="border border-gray-300 rounded-lg ml-2" placeholder="Enter Head of Account">
                 <div v-if="form.errors.name">{{ form.errors.name }}</div>
-                <button type="submit" :disabled="form.processing" class="border rounded-lg ml-2 p-2 bg-gray-600 hover:bg-gray-700 text-green-300 hover:text-green-200">Create Folder</button>
+                <button v-if="show_folder" type="submit" :disabled="form.processing" class="border rounded-lg ml-2 p-2 bg-gray-600 hover:bg-gray-700 text-green-300 hover:text-green-200">Create Head of Account</button>
             </form>
         </div>
         <div id="app" class="w-60 float-left m-2">
@@ -59,7 +59,7 @@
     import Treeselect from 'vue3-treeselect'
     import 'vue3-treeselect/dist/vue3-treeselect.css'
     import _ from 'lodash'
- 
+
  export default {
         setup () {
             const form = useForm({
@@ -76,6 +76,8 @@
         props: {
             data:Object,
             fold:Object,
+            show_folder:Boolean,
+            show_upload:Boolean,
         },
 
         data(){

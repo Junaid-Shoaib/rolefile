@@ -18297,6 +18297,15 @@ __webpack_require__.r(__webpack_exports__);
       this.$inertia.get(route('documents', {
         'fold': this.value
       }));
+    },
+    hello: function hello(item) {
+      if (item.is_folder) {
+        this.$inertia.get(route('documents', {
+          'fold': item.id
+        }));
+      } else {
+        window.open(item.path, '_blank');
+      }
     }
   }
 });
@@ -23881,10 +23890,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.name), 9
         /* TEXT, PROPS */
         , ["href"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("td", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("a", {
-          href: item.path
+          href: item.path,
+          onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
+            return $options.hello(item);
+          }, ["prevent"])
         }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.path), 9
         /* TEXT, PROPS */
-        , ["href"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("td", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("a", {
+        , ["href", "onClick"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("td", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("a", {
           href: item.path
         }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.parent_id), 9
         /* TEXT, PROPS */

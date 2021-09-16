@@ -38,10 +38,8 @@ class DocumentController extends Controller
             $data = Document::where('year_id',session('year_id'))->where('parent_id',$request->input('fold'))->get()->map(function($document){
                 return [
                     'id' => $document->id,
-                    'label' => $document->name,
                     'name' => $document->name,
                     'path' => asset('storage/'.$document->path),
-                    'year_id' => $document->year_id,
                     'is_folder' => $document->is_folder,
                     'parent_id' => $document->parent_id,
                 ];
@@ -54,7 +52,9 @@ class DocumentController extends Controller
                 return [
                     'id' => $document->id,
                     'name' => $document->name,
+                    'path' => asset('storage/'.$document->path),
                     'is_folder' => $document->is_folder,
+                    'parent_id' => $document->parent_id,
                 ];
             });
         }

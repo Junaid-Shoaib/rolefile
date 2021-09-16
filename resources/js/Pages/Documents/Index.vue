@@ -33,7 +33,7 @@
                 <tbody>
                     <tr v-for="item in data" :key="item.id" class="hover:bg-gray-100">
                         <td class="py-1 px-2"><a :href="item.path">{{item.name}}</a></td>
-                        <td class="py-1 px-2"><a :href="item.path" @click.prevent="hello(item)">{{item.path}}</a></td>
+                        <td class="py-1 px-2"><a :href="item.path" @click.prevent="open(item)">{{item.path}}</a></td>
                         <td class="py-1 px-2"><a :href="item.path">{{item.parent_id}}</a></td>
                         <td class="py-1 px-2">{{(item.is_folder)?"Yes":"No"}}</td>
                         <td class="py-1 px-2">
@@ -102,7 +102,7 @@
                 this.$inertia.get(route('documents', {'fold':this.value}))
             },
 
-            hello(item) {
+            open(item) {
                 if(item.is_folder){
                     this.$inertia.get(route('documents', {'fold':item.id}))
                 }

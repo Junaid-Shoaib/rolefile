@@ -18298,7 +18298,7 @@ __webpack_require__.r(__webpack_exports__);
         'fold': this.value
       }));
     },
-    hello: function hello(item) {
+    open: function open(item) {
       if (item.is_folder) {
         this.$inertia.get(route('documents', {
           'fold': item.id
@@ -23892,7 +23892,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         , ["href"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("td", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("a", {
           href: item.path,
           onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
-            return $options.hello(item);
+            return $options.open(item);
           }, ["prevent"])
         }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.path), 9
         /* TEXT, PROPS */

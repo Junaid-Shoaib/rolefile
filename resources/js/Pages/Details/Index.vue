@@ -11,7 +11,11 @@
                         <th class="py-2 px-4 border">Index</th>
                         <th class="py-2 px-4 border">Date</th>
                         <th class="py-2 px-4 border">Voucher</th>
-                        <th class="py-2 px-4 border">Cols</th>
+                        <th class="py-2 px-4 border">
+                            <ul class="inline" v-for="(col, j) in col1" :key="j">
+                                <li class="inline px-4">{{col}}</li>
+                            </ul>
+                        </th>
                         <th class="py-2 px-4 border">Actions</th>
                     </tr>
                 </thead>
@@ -21,8 +25,8 @@
                         <td class="py-2 px-4 border">{{item.date}}</td>
                         <td class="py-2 px-4 border">{{item.voucher}}</td>
                         <td class="py-2 px-4 border">{{item.cols}}
-                            <ul v-for="(col, j) in item.cols" :key="j">
-                                <li>{{j+1}} - {{col.key}} - {{col.value}}</li>
+                            <ul class="inline" v-for="(col, j) in item.cols" :key="j">
+                                <li class="inline">{{j+1}} - {{col.key}} - {{col.value}}</li>
                             </ul>
                         </td>
                         <td class="py-2 px-4 border">
@@ -49,7 +53,11 @@
             AppLayout,
         },
 
-        props: ['data'],
+        props: [
+            'data',
+            'col1',
+            'col2',
+        ],
 
         data(){
             return {

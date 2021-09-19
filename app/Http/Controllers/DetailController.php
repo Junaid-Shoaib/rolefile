@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Redirect;
 use App\Models\Detail;
 use App\Models\Year;
+use Box\Spout\Reader\Common\Creator\ReaderEntityFactory;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
@@ -13,6 +14,23 @@ class DetailController extends Controller
 {
     public function index(Request $request)
     {
+        $reader = ReaderEntityFactory::createCSVReader();
+//        $reader = ReaderEntityFactory::createReaderFromFile('generic.csv');
+        $reader->open('generic.csv');
+//        $reader->setFieldDelimiter(',');
+//        $reader->open('generic.csv');
+
+        $col1 = [];
+        $col2 = [];
+
+        foreach ($reader->getSheetIterator() as $sheet) {
+            foreach ($sheet->getRowIterator() as $rowIndex => $row) {
+                $col1[$rowIndex] = (string) $row->getCellAtIndex(0);
+                $col2[$rowIndex] = (string) $row->getCellAtIndex(1);
+            }
+        }
+//        dd($col2);
+        
         $data = Detail::all()->map(function($detail){
             return [
                 'id' => $detail->id,
@@ -27,6 +45,8 @@ class DetailController extends Controller
 //dd($data);
         return Inertia::render('Details/Index', [
             'data' => $data,
+            'col1' => $col1,
+            'col2' => $col2,
             ]);
     }
 
@@ -50,38 +70,25 @@ class DetailController extends Controller
         return Redirect::route('details')->with('success', 'Detail created.');
     }
 
-    public function show(Document $document)
+    public function show(Detail $detail)
     {
         //
     }
 
-    public function edit(Document $document)
+    public function edit(Detail $detail)
     {
-        return Inertia::render('Users/Edit', [
-            'user' => [
-                'id' => $user->id,
-                'title' => $user->title,
-                'body' => $user->body,
-            ],
-        ]);
     }
 
-    public function update(Document $document)
+    public function update(Detail $detail)
     {
-        $document->update(
-            Request::validate([
-            'title' => ['required', 'max:30'],
-            'body' => ['required'],
-            ])
-        );
 
-        return Redirect::route('documents')->with('success', 'User updated.');
+        return Redirect::route('details')->with('success', 'Detail updated.');
     }
 
-    public function destroy(Document $document)
+    public function destroy(Detail $detail)
     {
-        $document->delete();
-        return Redirect::back()->with('success', 'User deleted.');
+        $detail->delete();
+        return Redirect::back()->with('success', 'Detail deleted.');
     }
    
 }

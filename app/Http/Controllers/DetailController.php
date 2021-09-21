@@ -52,7 +52,31 @@ class DetailController extends Controller
 
     public function create()
     {
-        return Inertia::render('Details/Create');
+        $reader = ReaderEntityFactory::createCSVReader();
+        $reader->open('generic.csv');
+
+        $col1 = [];
+        $col2 = [];
+
+        foreach ($reader->getSheetIterator() as $sheet) {
+            foreach ($sheet->getRowIterator() as $rowIndex => $row) {
+                $col1[$rowIndex] = (string) $row->getCellAtIndex(0);
+                $col2[$rowIndex] = (string) $row->getCellAtIndex(1);
+            }
+        }
+//dd($col1);
+        // $coli = [];
+        // for($i=1;$i<(count($col1)+1);$i++){
+        //     array_push($coli,'{key:"'.$col1[$i].'",value:""}');
+        // }
+//        $coli = json_encode($coli);
+
+$coli = collect([]);
+        for($i=1;$i<(count($col1)+1);$i++){
+            $coli->push(['key' => $col1[$i], 'value' => '']);
+        }
+//dd($coli);
+        return Inertia::render('Details/Create',['coli' => $coli,]);
     }
 
     public function store(Request $request)

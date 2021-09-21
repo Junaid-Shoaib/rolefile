@@ -3,18 +3,20 @@
         <div v-if="$page.props.flash.success" class="bg-green-600 text-white">
             {{ $page.props.flash.success }}
         </div>
-        <button @click="create">Create</button>        
+        <button @click="create" class="border bg-gray-800 text-white px-4 py-2 rounded-md">Create</button>        
         <div class="">
-            <table class="shadow-lg border m-4 rounded-xl">
+            <table class="shadow-lg border rounded-xl">
                 <thead>
                     <tr class="bg-indigo-100">
                         <th class="py-2 px-4 border">Index</th>
                         <th class="py-2 px-4 border">Date</th>
                         <th class="py-2 px-4 border">Voucher</th>
-                        <th class="py-2 px-4 border">
-                            <ul class="inline" v-for="(col, j) in col1" :key="j">
-                                <li class="inline px-4">{{col}}</li>
-                            </ul>
+                        <th class="">
+                            <table class="table-auto">
+                                <tr class="inline text-center" v-for="(col, j) in col1" :key="j">
+                                    <td class="w-28">{{col}}</td>
+                                </tr>
+                            </table>
                         </th>
                         <th class="py-2 px-4 border">Actions</th>
                     </tr>
@@ -24,10 +26,12 @@
                         <td class="py-2 px-4 border">{{i+1}}</td>
                         <td class="py-2 px-4 border">{{item.date}}</td>
                         <td class="py-2 px-4 border">{{item.voucher}}</td>
-                        <td class="py-2 px-4 border">{{item.cols}}
-                            <ul class="inline" v-for="(col, j) in item.cols" :key="j">
-                                <li class="inline">{{j+1}} - {{col.key}} - {{col.value}}</li>
-                            </ul>
+                        <td class="">
+                            <table class="table-auto">
+                                <tr class="inline text-center" v-for="(col, j) in item.cols" :key="j">
+                                    <td class="w-28">{{col.value}}</td>
+                                </tr>
+                            </table>
                         </td>
                         <td class="py-2 px-4 border">
                             <inertia-link class="border bg-indigo-300 rounded-xl px-4 py-2 m-4" :href="route('details.edit', item.id)">

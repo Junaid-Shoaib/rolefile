@@ -75,8 +75,15 @@
         },
 
         props: {
-            errors : Object    
+            errors : Object,
+            coli: Object,
         },
+
+        // mounted() {
+        //     for(i=0;i<this.col1.length;i++){
+        //         cols.push('{key:"'+this.col1[i]+'",value:""}');
+        //     }
+        // },
 
         data() {
             return {
@@ -85,13 +92,14 @@
                     voucher: null,
                     particular: null,
                     amount: null,
-                    cols: [{key:'',value:''},{key:'',value:''}],
-
+//                    cols: [{key:'',value:''},{key:'',value:''}],
+                    cols: this.coli,
 //                    cols: Array,
                     account_id: null,
                 }),
             }
         },
+
         methods: {
             submit() {
                 this.form.date = format(this.form.date,'yyyy-MM-dd')

@@ -32,9 +32,9 @@
                 </thead>
                 <tbody>
                     <tr v-for="item in data" :key="item.id" class="hover:bg-gray-100">
-                        <td class="py-1 px-2"><a :href="item.path">{{item.name}}</a></td>
+                        <td class="py-1 px-2"><a :href="item.path" @click.prevent="open(item)">{{item.name}}</a></td>
                         <td class="py-1 px-2"><a :href="item.path" @click.prevent="open(item)">{{item.path}}</a></td>
-                        <td class="py-1 px-2"><a :href="item.path">{{item.parent_id}}</a></td>
+                        <td class="py-1 px-2"><a :href="item.path" @click.prevent="open(item)">{{item.parent_id}}</a></td>
                         <td class="py-1 px-2">{{(item.is_folder)?"Yes":"No"}}</td>
                         <td class="py-1 px-2">
                             <inertia-link v-if="item.is_folder" class="border border-indigo-400 bg-indigo-200 hover:bg-indigo-400 hover:text-white rounded px-2 py-1 m-1" :href="route('documents.edit', item.id)">

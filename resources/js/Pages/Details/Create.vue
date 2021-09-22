@@ -29,31 +29,17 @@
                         <div v-if="errors.account_id">{{ errors.account_id }}</div>
                     </div>
                     <div class="p-2 mr-2 mb-2 mt-4 ml-6 flex flex-wrap">
-                        <table class="table border">
-                            <thead class="">
-                                <tr>                            
-                                    <th>
-                                    Key
-                                    </th>
-                                    <th>
-                                    Value
-                                    </th>
-                                </tr>                        
-                            </thead>
-                            <tbody>
-                                <tr v-for='(col, i) in form.cols' :key="i">                            
-                                    <td>
-                                    <input  v-model="col.key"  type="text" />
-                                    </td>
-                                    <td>
-                                    <input  v-model="col.value"  type="text" />
-                                    </td>
-                                </tr>                        
-                            </tbody>
+                        <table class="table">
+                            <tr v-for='(col, i) in form.cols' :key="i">                            
+                                <td>
+                                <label class="w-28 inline-block text-right mr-4">{{col.key}}: </label>
+                                </td>
+                                <td class="pr-6 pb-8 w-full lg:w-1/2">
+                                <input  v-model="col.value"  type="text" />
+                                </td>
+                            </tr>                        
                         </table>
-
                     </div>
-
                 </div>
                 <div class="px-8 py-4 bg-gray-100 border-t border-gray-200 flex justify-end items-center">
                     <button class="border bg-indigo-300 rounded-xl px-4 py-2 m-4" type="submit">Create Detail</button>
@@ -79,12 +65,6 @@
             coli: Object,
         },
 
-        // mounted() {
-        //     for(i=0;i<this.col1.length;i++){
-        //         cols.push('{key:"'+this.col1[i]+'",value:""}');
-        //     }
-        // },
-
         data() {
             return {
                 form: this.$inertia.form({
@@ -94,7 +74,6 @@
                     amount: null,
 //                    cols: [{key:'',value:''},{key:'',value:''}],
                     cols: this.coli,
-//                    cols: Array,
                     account_id: null,
                 }),
             }

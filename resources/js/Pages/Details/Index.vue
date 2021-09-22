@@ -11,7 +11,7 @@
                         <th class="py-2 px-4 border">Index</th>
                         <th class="py-2 px-4 border">Date</th>
                         <th class="py-2 px-4 border">Voucher</th>
-                        <th class="">
+                        <th class="py-2 px-4 border">
                             <table class="table-auto">
                                 <tr class="inline text-center" v-for="(col, j) in col1" :key="j">
                                     <td class="w-28">{{col}}</td>
@@ -26,7 +26,7 @@
                         <td class="py-2 px-4 border">{{i+1}}</td>
                         <td class="py-2 px-4 border">{{item.date}}</td>
                         <td class="py-2 px-4 border">{{item.voucher}}</td>
-                        <td class="">
+                        <td class="py-2 px-4 border">
                             <table class="table-auto">
                                 <tr class="inline text-center" v-for="(col, j) in item.cols" :key="j">
                                     <td class="w-28">{{col.value}}</td>

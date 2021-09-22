@@ -15,10 +15,7 @@ class DetailController extends Controller
     public function index(Request $request)
     {
         $reader = ReaderEntityFactory::createCSVReader();
-//        $reader = ReaderEntityFactory::createReaderFromFile('generic.csv');
         $reader->open('generic.csv');
-//        $reader->setFieldDelimiter(',');
-//        $reader->open('generic.csv');
 
         $col1 = [];
         $col2 = [];
@@ -29,7 +26,6 @@ class DetailController extends Controller
                 $col2[$rowIndex] = (string) $row->getCellAtIndex(1);
             }
         }
-//        dd($col2);
         
         $data = Detail::all()->map(function($detail){
             return [
@@ -42,18 +38,18 @@ class DetailController extends Controller
                 'account_id' =>$detail->account_id,
             ];
         });
-//dd($data);
+
         return Inertia::render('Details/Index', [
             'data' => $data,
             'col1' => $col1,
             'col2' => $col2,
-            ]);
+        ]);
     }
 
     public function create()
     {
         $reader = ReaderEntityFactory::createCSVReader();
-        $reader->open('generic.csv');
+        $reader->open('generic2.csv');
 
         $col1 = [];
         $col2 = [];
@@ -64,18 +60,12 @@ class DetailController extends Controller
                 $col2[$rowIndex] = (string) $row->getCellAtIndex(1);
             }
         }
-//dd($col1);
-        // $coli = [];
-        // for($i=1;$i<(count($col1)+1);$i++){
-        //     array_push($coli,'{key:"'.$col1[$i].'",value:""}');
-        // }
-//        $coli = json_encode($coli);
 
-$coli = collect([]);
+        $coli = collect([]);
         for($i=1;$i<(count($col1)+1);$i++){
             $coli->push(['key' => $col1[$i], 'value' => '']);
         }
-//dd($coli);
+
         return Inertia::render('Details/Create',['coli' => $coli,]);
     }
 

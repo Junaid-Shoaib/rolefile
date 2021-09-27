@@ -21,12 +21,12 @@ class YearController extends Controller
         return Inertia::render('Years/Index', [
             'data' => Year::where('company_id',session('company_id'))->get(),
             'companies' => Company::all()
-                ->map(function($company){
-                    return [
-                    'id' => $company->id,
-                    'name' => $company->name,
-                    ];
-                }), 
+            ->map(function($company){
+                return [
+                'id' => $company->id,
+                'name' => $company->name,
+                ];
+            }), 
         ]);
     }
 
@@ -67,9 +67,9 @@ class YearController extends Controller
                 'Miscellaneous',
             ];
 
-            $heads = [
-                'Fixed Assets',
-                'Long Term Deposits',
+            // $heads = [
+                // 'Fixed Assets',
+                // 'Long Term Deposits',
                 // 'Stock in Trade',
                 // 'Trade Debts',
                 // 'Deposits & Prepayments',
@@ -90,7 +90,7 @@ class YearController extends Controller
                 // 'Financial Charges',
                 // 'Other Operating Charges',
                 // 'Taxation',
-            ];
+            // ];
 
             for($i=0;$i<count($folders);$i++){
                 Storage::makeDirectory('public/'.$year->id.'/'.$folders[$i]);
@@ -101,18 +101,18 @@ class YearController extends Controller
                     'is_folder' => 1,
                     'parent_id' => $root->id,
                     ]);
-                if($folder->name == 'Execution'){
-                for($j=0;$j<count($heads);$j++){
-                    Storage::makeDirectory('public/'.$year->id.'/Execution/'.$heads[$j]);
-                    Document::create([
-                        'name' => $heads[$j],
-                        'path' => $year->id.'/Execution/'.$heads[$j],
-                        'year_id' => $year->id,
-                        'is_folder' => 1,
-                        'parent_id' => $folder->id,
-                        ]);
-                    }
-                }
+                // if($folder->name == 'Execution'){
+                //     for($j=0;$j<count($heads);$j++){
+                //         Storage::makeDirectory('public/'.$year->id.'/Execution/'.$heads[$j]);
+                //         Document::create([
+                //             'name' => $heads[$j],
+                //             'path' => $year->id.'/Execution/'.$heads[$j],
+                //             'year_id' => $year->id,
+                //             'is_folder' => 1,
+                //             'parent_id' => $folder->id,
+                //             ]);
+                //     }
+                // }
             }
 
             if(!Auth::user()->settings()->where('key','active_year')->first()){

@@ -16,6 +16,9 @@
                 <button v-if="show_folder" type="submit" :disabled="form.processing" class="border rounded-lg ml-2 p-2 bg-gray-600 hover:bg-gray-700 text-green-300 hover:text-green-200">Create Head of Account</button>
             </form>
         </div>
+        <div class="m-2">
+            <button v-if="show_excel" @click="create_excel" class="inline-block border rounded-lg ml-2 p-2 bg-gray-600 hover:bg-gray-700 text-green-300 hover:text-green-200 m-2">Excel</button>
+        </div>
         <div id="app" class="w-60 float-left m-2">
             <treeselect v-model="value" :multiple="false" :alwaysOpen="true" :options="fold" v-on:select="treeChange"/>
         </div>

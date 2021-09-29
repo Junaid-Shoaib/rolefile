@@ -11,6 +11,7 @@ use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\DetailController;
 use App\Http\Controllers\Excel;
 use App\Http\Controllers\Gen;
+use App\Http\Controllers\Trial;
 // use Illuminate\Support\Facades\Storage;
 
 /*
@@ -209,6 +210,7 @@ Route::delete('details/{detail}', [DetailController::class, 'destroy'])
 
 Route::get('/excel', Excel::class)->name('excel')->middleware('auth');
 Route::get('/gen', Gen::class)->name('gen')->middleware('auth');
+Route::post('/trial', Trial::class)->name('trial')->middleware('auth');
 
 
 // Google drive

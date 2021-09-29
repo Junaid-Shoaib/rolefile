@@ -7,6 +7,7 @@ use Redirect;
 use App\Models\Document;
 use App\Models\Year;
 use App\Models\User;
+use App\Models\Group;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -63,6 +64,7 @@ class DocumentController extends Controller
             'fold' => $fold,
             'show_folder' => ($exeID == $request->input('fold')) ? true : false,
             'show_upload' => (($exeID == $request->input('fold')) || (session('parent_id') == $rootID)) ? false : true,
+            'show_groups' => Group::where('year_id',session('year_id'))->first() ? false : true,
         ]);
     }
 

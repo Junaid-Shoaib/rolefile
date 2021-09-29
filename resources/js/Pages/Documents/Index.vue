@@ -16,8 +16,16 @@
                 <button v-if="show_folder" type="submit" :disabled="form.processing" class="border rounded-lg ml-2 p-2 bg-gray-600 hover:bg-gray-700 text-green-300 hover:text-green-200">Create Head of Account</button>
             </form>
         </div>
-        <div class="m-2">
-            <button v-if="show_excel" @click="create_excel" class="inline-block border rounded-lg ml-2 p-2 bg-gray-600 hover:bg-gray-700 text-green-300 hover:text-green-200 m-2">Excel</button>
+        <div class="m-2" v-if="show_groups">
+            <form @submit.prevent="submit">
+                <div class="p-8 -mr-6 -mb-8 flex flex-wrap">
+                <input type="file" v-on:change="onFileChange"/>
+                <progress v-if="form2.progress" :value="form2.progress.percentage" max="100">
+                {{ form2.progress.percentage }}%
+                </progress>
+                <button class="border bg-indigo-300 rounded-xl px-4 py-2 m-4" type="submit">Upload Trial Balance</button>
+                </div>
+            </form>
         </div>
         <div id="app" class="w-60 float-left m-2">
             <treeselect v-model="value" :multiple="false" :alwaysOpen="true" :options="fold" v-on:select="treeChange"/>
@@ -68,7 +76,10 @@
             const form = useForm({
                 name: null,
             })
-            return { form }
+            const form2 = useForm({
+                avatar: null,
+            })
+            return { form, form2 }
         },
 
         components: {
@@ -81,6 +92,7 @@
             fold:Object,
             show_folder:Boolean,
             show_upload:Boolean,
+            show_groups:Boolean,
         },
 
         data(){
@@ -112,7 +124,19 @@
                 else {
                 window.open(item.path, '_blank');
                 }
-            }
+            },
+
+            submit() {
+//            this.$inertia.post(this.route('documents.store'), this.form)
+            this.form2.post(route('trial'))
+            },
+
+            onFileChange(e) {
+                var files = e.target.files || e.dataTransfer.files;
+                if (!files.length)
+                    return;
+                this.form2.avatar = files[0];
+            },
         },
     }
 </script>

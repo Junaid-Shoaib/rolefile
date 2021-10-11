@@ -9,12 +9,16 @@ use Box\Spout\Reader\Common\Creator\ReaderEntityFactory;
 use App\Models\Balance;
 use App\Models\Group;
 use App\Models\Account;
+use App\Models\Document;
 use App\Models\Type;
+use Illuminate\Support\Facades\Storage;
 
 class Trial extends Controller
 {
     public function __invoke(Request $request)
     {
+//        $groups = Group::where('year_id',session('year_id'))->get();
+
         $reader = ReaderEntityFactory::createXLSXReader();
 
         $reader->open($request->file('avatar'));
@@ -24,6 +28,7 @@ class Trial extends Controller
         foreach ($reader->getSheetIterator() as $sheet) {
             $i=0;
             $type='';
+            $type_doc='';
             $group='';
             foreach ($sheet->getRowIterator() as $rowIndex => $row) {
                 $col1 = (string) $row->getCellAtIndex(0);
@@ -41,6 +46,14 @@ class Trial extends Controller
                     $type = Type::create([
                         'name' => $col2,
                     ]);
+                    Storage::makeDirectory('public/'.session('year_id').'/Execution/'.$type->name);
+                    $type_doc=Document::create([
+                        'name' => $type->name,
+                        'path' => session('year_id').'/Execution/'.$type->name,
+                        'year_id' => session('year_id'),
+                        'is_folder' => 1,
+                        'parent_id' => Document::where('year_id',session('year_id'))->where('name','Execution')->first()->id,
+                    ]);
                 }
                 
                 if(strlen($col3)>1){
@@ -48,7 +61,15 @@ class Trial extends Controller
                         'name' => $col3,
                         'type_id' => $type->id,
                         'year_id' => session('year_id'),
-                    ]); 
+                    ]);
+                    Storage::makeDirectory('public/'.session('year_id').'/Execution/'.$type->name.'/'.$group->name);
+                    Document::create([
+                        'name' => $group->name,
+                        'path' => session('year_id').'/Execution/'.$type->name.'/'.$group->name,
+                        'year_id' => session('year_id'),
+                        'is_folder' => 1,
+                        'parent_id' => $type_doc->id,
+                    ]);
                 }
 
                 if(strlen($col1)>5){
@@ -68,10 +89,10 @@ class Trial extends Controller
                     ]);
                 }
 
-                ++$i;
-                if($i==100) break;
+//                ++$i;
+//                if($i==100) break;
             }
-            break;
+//            break;
         }
 
         $reader->close();

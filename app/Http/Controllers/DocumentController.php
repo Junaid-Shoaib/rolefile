@@ -20,18 +20,35 @@ class DocumentController extends Controller
         $rootID = Document::where('year_id',session('year_id'))->where('name',session('year_id'))->first()->id;
         $exeID = Document::where('parent_id',$rootID)->where('name','Execution')->first()->id;
 
-        $exe = Document::where('parent_id',$exeID)->get()->map(function($document){
-            return [
-                'id' => $document->id,
-                'label' => $document->name,
-            ];
-        })->toArray();
+        $types = Document::where('parent_id',$exeID)->pluck('id')->toArray();
+        $types_names = Document::where('parent_id',$exeID)->pluck('name')->toArray();
 
-        $fold = Document::where('parent_id',$rootID)->get()->map(function($document) use ($exe) {
+        $groups = collect();
+        for($i=0;$i<count($types);$i++){
+            $groups->push([
+                'id' => $types[$i],
+                'label' => $types_names[$i],
+                'children' => Document::where('parent_id',$types[$i])->get()->map(function($document){
+                    return[
+                        'id' => $document->id,
+                        'label' => $document->name,
+                    ];
+                })
+            ]);
+        }
+
+        // $exe = Document::where('parent_id',$exeID)->get()->map(function($document){
+        //     return [
+        //         'id' => $document->id,
+        //         'label' => $document->name,
+        //     ];
+        // })->toArray();
+
+        $fold = Document::where('parent_id',$rootID)->get()->map(function($document) use ($groups) {
             return [
                 'id' => $document->id,
                 'label' => $document->name,
-                'children' => ($document->name == 'Execution')? $exe:null,
+                'children' => ($document->name == 'Execution')? $groups->toArray():null,
             ];
         });
 
